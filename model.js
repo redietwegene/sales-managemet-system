@@ -1,13 +1,4 @@
-const mongoose = require('mongoose');
-mongoose
-.connect(mongourl)
-.then(()=>{
-    console.log("Database is connected successfully");
-    app.listen(PORT ,()=>{
-        console.log(`server is running on port ${PORT}`)
-    });
-})
-.catch((error) => console.log(error));
+import mongoose from "mongoose";
 
 
 const customerSchema = new mongoose.Schema({
@@ -30,7 +21,7 @@ const salesSchema = new mongoose.Schema({
     tax: Number,
     totalPrice: Number
 });
-s
+
 const salesItemsSchema = new mongoose.Schema({
     salesID: {
         type: mongoose.Schema.Types.ObjectId,
@@ -56,5 +47,6 @@ const Customer = mongoose.model('Customer', customerSchema);
 const Sales = mongoose.model('Sales', salesSchema);
 const SalesItems = mongoose.model('SalesItems', salesItemsSchema);
 const Item = mongoose.model('Item', itemSchema);
+ 
 
-module.exports = { Customer, Sales, SalesItems, Item };
+export default Customer;
