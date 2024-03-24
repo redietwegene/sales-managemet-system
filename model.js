@@ -40,7 +40,8 @@ const salesItemsSchema = new mongoose.Schema({
 
 const itemSchema = new mongoose.Schema({
     itemName: String,
-    itemDescription: String
+    itemDescription: String,
+    itemPrice: Number
 });
 
 const Customer = mongoose.model('Customer', customerSchema);
@@ -49,4 +50,4 @@ const SalesItems = mongoose.model('SalesItems', salesItemsSchema);
 const Item = mongoose.model('Item', itemSchema);
  
 
-export default Customer;
+export {Customer ,Item} ;
