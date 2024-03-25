@@ -15,11 +15,16 @@ const salesSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customer' 
     },
-    number: String,
-    FSNumber: String,
+    // number: String,
+    // FSNumber: String,
     price: Number,
     tax: Number,
-    totalPrice: Number
+    totalPrice: Number,
+    items: [{
+        itemName: String,
+        quantity: Number,
+        itemPrice: Number
+    }]
 });
 
 const salesItemsSchema = new mongoose.Schema({
@@ -31,11 +36,14 @@ const salesItemsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Item' 
     },
+    itemName: String,
     itemDescription: String,
+    itemPrice:Number,
     quantity: Number,
-    tax: Number,
+    // tax: Number,
     totalPrice: Number
 });
+
 
 
 const itemSchema = new mongoose.Schema({
@@ -50,4 +58,4 @@ const SalesItems = mongoose.model('SalesItems', salesItemsSchema);
 const Item = mongoose.model('Item', itemSchema);
  
 
-export {Customer ,Item} ;
+export { Customer, Item,Sales ,SalesItems};
