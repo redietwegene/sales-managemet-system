@@ -65,6 +65,53 @@ app.post ("/createCustomer" , (req ,res)=>{
 
 })
 
+app.get("/edit/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const customerData = await Customer.findById(id);
+        res.render("editCustomer.ejs", { customerData });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+app.post("/edit/:id", async (req, res) => {
+    const { id } = req.params;
+    const { updatedName, updatedTIN, updatedPhonenumber, updatedAdress ,updatedContactperson } = req.body; // Use req.body to access form data
+
+    try {
+        const customerData = await UserModel.findByIdAndUpdate(id, {
+          name:updatedName,
+          TIN:updatedTIN,
+          phoneNumber:updatedPhonenumber,
+          address:updatedAdress,
+          contactPerson:updatedContactperson,
+        }, { new: true });
+
+        res.redirect("/");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+
+});
+
+app.get("/delete/:id" , async(req , res )=>{
+    const {id} = req.params;
+    try{
+        const customerData= await Customer.findByIdAndDelete(id);
+        res.redirect("/");
+    }catch(error){
+        console.log(error);
+        res.status(500).send(error);
+    }
+
+ });
+
+
+
+
 app.post("/addItem" ,(req ,res )=>{
     const items= new  Item ({
         itemName:  req.body.itemName,
