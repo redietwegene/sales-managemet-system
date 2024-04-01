@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
-import { Customer, Item ,Sales ,SalesItems} from "./model.js";
+import { User,Customer, Item ,Sales ,SalesItems} from "./model.js";
 
 import dotenv from "dotenv";
 
@@ -25,14 +25,64 @@ mongoose
 })
 .catch((error) => console.log(error));
 
+
+
+  
+
 app.set('view engine', 'ejs');
 app.use (bodyParser.urlencoded({extended:true}));
 
 
 
-// app.get("/",(req ,res)=>{
-//     res.render("addCustomer");
-// })
+app.get("/",(req ,res)=>{
+    res.render("addCustomer");
+})
+
+
+app.get("/signup" ,(req ,res) =>{
+    res.render("signup")
+});
+
+app.post("/signup" ,async(req ,res)=>{
+    const { userName, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const employe = new User({
+        userName: userName,
+        email: email,
+        password: hashedPassword
+    });
+    employe.save()
+    .then (savedEmploye =>{
+        console.log("employee saved")
+    })
+    .catch (error =>{
+        console.error("error ",error)
+        res.status(500).send("Error in saving employe")
+    });
+    
+
+})
+
+app.post("/login", async (req,res)=>{
+    try{
+        const{username,password}=req.body;
+        const employe=await User.findOne({userName:username});
+        if (!employe){
+            return res.status(400).send ("user not found");
+        }
+        const isPasswordValid = await bcrypt.compare(password, employe.password);
+        if (!isPasswordValid) {
+            return res.status(401).send("Incorrect password");
+        }
+        res.status(200).send("Login successful");
+    } catch (error) {
+        console.error("Error in login process:", error);
+        res.status(500).send("Error in login process");
+    }
+})
+
+
 app.get("/customer" ,async(req ,res) =>{
     try {
         const customerData = await Customer.find(); 
@@ -64,53 +114,6 @@ app.post ("/createCustomer" , (req ,res)=>{
     });
 
 })
-
-app.get("/edit/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const customerData = await Customer.findById(id);
-        res.render("editCustomer.ejs", { customerData });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
-});
-
-app.post("/edit/:id", async (req, res) => {
-    const { id } = req.params;
-    const { updatedName, updatedTIN, updatedPhonenumber, updatedAdress ,updatedContactperson } = req.body; // Use req.body to access form data
-
-    try {
-        const customerData = await UserModel.findByIdAndUpdate(id, {
-          name:updatedName,
-          TIN:updatedTIN,
-          phoneNumber:updatedPhonenumber,
-          address:updatedAdress,
-          contactPerson:updatedContactperson,
-        }, { new: true });
-
-        res.redirect("/");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error);
-    }
-
-});
-
-app.get("/delete/:id" , async(req , res )=>{
-    const {id} = req.params;
-    try{
-        const customerData= await Customer.findByIdAndDelete(id);
-        res.redirect("/");
-    }catch(error){
-        console.log(error);
-        res.status(500).send(error);
-    }
-
- });
-
-
-
 
 app.post("/addItem" ,(req ,res )=>{
     const items= new  Item ({

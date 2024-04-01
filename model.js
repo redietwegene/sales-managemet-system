@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 
 
+const userSchema=new mongoose.Schema({
+    userName:String,
+    email:String,
+    password:String,
+
+
+})
+
 const customerSchema = new mongoose.Schema({
     name: String,
     TIN: String,
@@ -45,17 +53,16 @@ const salesItemsSchema = new mongoose.Schema({
 });
 
 
-
 const itemSchema = new mongoose.Schema({
     itemName: String,
     itemDescription: String,
     itemPrice: Number
 });
-
+const User =mongoose.model('user' ,userSchema)
 const Customer = mongoose.model('Customer', customerSchema);
 const Sales = mongoose.model('Sales', salesSchema);
 const SalesItems = mongoose.model('SalesItems', salesItemsSchema);
 const Item = mongoose.model('Item', itemSchema);
  
 
-export { Customer, Item,Sales ,SalesItems};
+export { User, Customer, Item,Sales ,SalesItems};
