@@ -199,8 +199,6 @@ app.post("/createSale", async (req, res) => {
     } catch (error) {
         console.error("Error creating sale:", error);
         res.status(500).send("Error creating sale");
-        kjfd
-        
     }
 });
 
