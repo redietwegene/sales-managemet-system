@@ -33,7 +33,8 @@ mongoose
 // app.set('view engine', 'jsx');
 app.use (bodyParser.urlencoded({extended:true}));
 // app.use(bodyParser.json());
-app.get("/",(req ,res)=>{
+app.get("/", (req, res) => {
+    res.cookie("sky","blue")
     // res.render("createSale");
     res.send("hallo")
 })
